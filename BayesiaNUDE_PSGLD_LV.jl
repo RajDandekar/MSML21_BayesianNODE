@@ -268,7 +268,7 @@ end
 
 
 x_sol, y_sol, UDE_SGLD = UDE_term(UDE_SGLD, findmin(aicc_store)[2][2])
-Ψ = SInDy(vcat(x_sol', y_sol'), UDE_SGLD[1:end], basis, opt = opt, maxiter = 10000, normalize = true, denoise = true) # Suceed
+Ψ = SInDy(vcat(x_sol', y_sol'), UDE_SGLD[1:end], basis, opt, maxiter = 10000, normalize = true, denoise = true) # Suceed
 
 print_equations(Ψ,  show_parameter = true)
 
