@@ -42,7 +42,7 @@ end
 ### Fit neural ode to the data
 @everywhere @model function fit_node(data)
     σ ~ InverseGamma(2, 3)
-    p ~ MvNormal(pmin_lv, 0.06)
+    p ~ MvNormal(pmin_lv, 0.4)
 
     # Calculate predictions for the inputs given the params.
     predicted = predict_node(p)
@@ -53,7 +53,7 @@ end
     end
 end
 
-@everywhere model = fit_node(y_train);  
+@everywhere model = fit_node(y_train);
 function perform_inference(lr, alpha, samplesize, num_chains)
     alg = SGHMC(learning_rate=lr, momentum_decay=alpha)
     chain = sample(model, alg, MCMCThreads(), samplesize, num_chains, init_theta=zero(pmin_lv), progress=true);
@@ -76,7 +76,7 @@ pmin = opt2.minimizer;
 save("pmin_lv.jld", "pmin_lv", pmin)
 
 using JLD
-pmin = load("pmin_lv.jld")  
+pmin = load("pmin_lv.jld")
 pmin = pmin["pmin_lv"]
 pmin_lv = pmin;
 
@@ -127,9 +127,9 @@ end
 ## ---------------------------------------------------
 
 
-samples = 1000
+lr = 1.5e-6; md = 0.07; samples = 2500
 
-lr = 2e-7; md = 0.1; num_chains = 7;
+num_chains = 7
 
 chain = perform_inference(lr, md, samples, num_chains);
 for i in 1:num_chains
